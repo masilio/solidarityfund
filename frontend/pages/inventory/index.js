@@ -224,8 +224,8 @@ const TABS = [
   { key: "items", label: "Items", Component: ItemsTab },
   { key: "categories", label: "Categories", Component: CategoriesTab },
   { key: "stock", label: "Stock Levels", Component: StockTab },
-  { key: "movements", label: "Movements (read-only)", Component: MovementsTab },
-  { key: "ledger", label: "Fund Ledger (read-only)", Component: LedgerTab },
+  { key: "movements", label: "Movements ", Component: MovementsTab },
+  { key: "ledger", label: "Fund Ledger ", Component: LedgerTab },
 ];
 
 export default function Inventory() {

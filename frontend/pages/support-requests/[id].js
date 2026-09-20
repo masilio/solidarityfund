@@ -148,11 +148,6 @@ export default function SupportRequestDetail() {
     }
   }
 
-  // No form here on purpose: everything given out is exactly what was approved
-  // (approval.approved_amount for cash, quantity_approved on each item line) — a
-  // distributor confirms the handover, they don't get to type in different numbers.
-  // payout_method is the one real choice: it picks the channel (mobile money vs handed
-  // over outside the system), never the amount.
   async function handleDisburse(payoutMethod) {
     setDisbursing(true);
     try {

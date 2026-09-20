@@ -5,10 +5,7 @@ import { useToast } from "../lib/toast";
 import FormModal from "../components/FormModal";
 import api from "../lib/api";
 
-// Mirrors the Contributor form on the Contributions page — because that's what registering
-// here actually creates: a Contributor record (the org/individual giving) linked to a new
-// login, not just a bare user account. Password is the one addition, since this form also
-// has to set up how they'll sign back in.
+
 const REGISTER_FIELDS = [
   { name: "contributor_name", label: "Contributor Name", required: true },
   { name: "contributor_type", label: "Type", required: true, type: "select",
@@ -19,11 +16,17 @@ const REGISTER_FIELDS = [
   { name: "password", label: "Password", type: "password", required: true },
 ];
 
+const LOGIN_FIELDS = [
+  { name: "email", label: "Email", type: "email", required: true },
+  { name: "password", label: "Password", type: "password", required: true },
+];
+
 export default function Home() {
   const router = useRouter();
-  const { user, ready } = useAuth();
+  const { user, ready,login } = useAuth();
   const { notifySuccess, notifyError } = useToast();
   const [showRegister, setShowRegister] = useState(false);
+  const [showLogin,setShowLogin] = useState(false);
 
   useEffect(() => {
     if (ready && user) router.replace("/dashboard");
@@ -34,10 +37,20 @@ export default function Home() {
       await api.post("/auth/register", values);
       notifySuccess("Account created — sign in to continue");
       setShowRegister(false);
-      router.push("/login");
+       setShowLogin(true);
     } catch (err) {
       notifyError(err, "Could not create your account");
     }
+  }
+
+  async function checkIn(values) {
+    try {
+      await login(values.email, values.password);
+      notifySuccess("Signed in successfully");
+      setShowLogin(false)
+    } catch (err) {
+      notifyError(err, "Login failed");
+    } 
   }
 
   if (!ready || user) return null;
@@ -47,66 +60,61 @@ export default function Home() {
       <header className="sf-landing-hero">
         <div className="sf-landing-hero-inner">
           <div className="sf-landing-brand">Social Solidarity Fund</div>
-          <h1>Community support, organized and accountable.</h1>
+          <h1>Supporting Disaster-Affected Communities. Building Better Lives.</h1>
           <p>
-            A platform that connects contributors, disaster-response teams, and resource
-            managers so assistance reaches affected households quickly, transparently, and
-            with a full record of who gave, who verified, and who received.
+          Connecting contributors and emergency support people to deliver assistance
+           quickly, transparently.
           </p>
           <div className="sf-landing-actions">
             <button className="btn btn-sf-accent btn-lg" onClick={() => setShowRegister(true)}>Donate</button>
-            <button className="btn btn-lg sf-landing-checkin" onClick={() => router.push("/login")}>Check In</button>
+            <button className="btn btn-lg sf-landing-checkin" onClick={() => setShowLogin(true)}>Check In</button>
           </div>
         </div>
       </header>
 
-      <main className="sf-landing-body">
-        <section className="sf-landing-section">
-          <h2>About the Fund</h2>
-          <p>
-            The Social Solidarity Fund is a community-driven safety net for households affected
-            by disasters and hardship — floods, fires, displacement, and other emergencies.
-            Contributions from government partners, organizations, and individuals are pooled
-            into one fund and distributed as cash or essential items to households whose needs
-            have been assessed and verified.
-          </p>
-        </section>
+     <main className="sf-landing-body">
+  <section className="sf-landing-section">
+    <h2>About the Fund</h2>
+    <p>
+      The Social Solidarity Fund supports households affected by disasters and
+      emergencies through cash and essential items.
+    </p>
+  </section>
 
-        <section className="sf-landing-section sf-landing-section-alt">
-          <h2>Our Purpose</h2>
-          <p>
-            Every contribution is tracked from the moment it's received to the moment it reaches
-            a household — with independent verification at each step: an assessment records what
-            a household actually needs, resource management staff confirm what's available to
-            give, an authorized approver signs off, and the handover itself is recorded against
-            the exact amount approved. Nothing moves without a record of who did what and when.
-          </p>
-        </section>
+  <section className="sf-landing-section sf-landing-section-alt">
+    <h2>Our Purpose</h2>
+    <p>
+      We ensure assistance is delivered quickly, transparently, and
+      accountably, with every contribution and handover recorded.
+    </p>
+  </section>
 
-        <section className="sf-landing-section">
-          <h2>Who We Serve</h2>
-          <div className="row g-3 mt-1">
-            <div className="col-md-4">
-              <div className="sf-landing-card">
-                <h3>Affected Households</h3>
-                <p>Families and individuals impacted by disasters who need cash or material assistance, assessed and supported through a transparent process.</p>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="sf-landing-card">
-                <h3>Contributors</h3>
-                <p>Government bodies, NGOs, companies, and individuals who want their donation tracked from receipt to distribution.</p>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="sf-landing-card">
-                <h3>Response Teams</h3>
-                <p>Response and resource management staff who register, assess, verify, and distribute assistance with full accountability.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
+  <section className="sf-landing-section">
+    <h2>Who We Serve</h2>
+    <div className="row g-3 mt-1">
+      <div className="col-md-4">
+        <div className="sf-landing-card">
+          <h3>Affected Households</h3>
+          <p>Receive verified cash or essential item support.</p>
+        </div>
+      </div>
+
+      <div className="col-md-4">
+        <div className="sf-landing-card">
+          <h3>Contributors</h3>
+          <p>Government, organizations, and individuals provide support.</p>
+        </div>
+      </div>
+
+      <div className="col-md-4">
+        <div className="sf-landing-card">
+          <h3>Response Teams</h3>
+          <p>Assess needs, manage resources, and deliver assistance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
       <footer className="sf-landing-footer">
         <span>&copy; {new Date().getFullYear()} Social Solidarity Fund Management System</span>
@@ -115,6 +123,11 @@ export default function Home() {
       {showRegister && (
         <FormModal title="Register as a Contributor" fields={REGISTER_FIELDS} initialValues={{}}
                    submitLabel="Create Account" onSubmit={submitRegistration} onClose={() => setShowRegister(false)} />
+      )}
+
+      {showLogin && (
+        <FormModal title="Check In " fields={LOGIN_FIELDS} initialValues={{}}
+                   submitLabel="Sign In" onSubmit={checkIn} onClose={() => setShowLogin(false)} />
       )}
     </div>
   );

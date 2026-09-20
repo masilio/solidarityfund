@@ -27,6 +27,7 @@ export default function ContributionDetail() {
   async function load() {
     if (!id) return;
     try {
+      await api.post(`/contributions/${id}/check-payment`);
       const res = await api.get(`/contributions/${id}`);
       setC(res.data);
     } catch (err) {
@@ -34,12 +35,10 @@ export default function ContributionDetail() {
     }
   }
   useEffect(() => { load(); }, [id]);
- // useEffect(() => { api.get("/payments/account-details").then((r) => setAccountDetails(r.data)); }, []);
 
   const canPay = isContributor && c?.cash && c.cash.payment_status !== "PAID" && GATEWAY_METHODS.includes(c.cash.payment_method);
   // Checking status polls Flutterwave by charge id — only the mobile-money flow has one
-  // (the bank flow gets a virtual account number to transfer into, nothing to poll for here).
-  const canCheckStatus = isContributor && c?.cash && c.cash.payment_status !== "PAID" && c.cash.gateway_charge_id;
+  
 
   const payFields = c?.cash ? [
     { name: "amount", label: "Amount Being Paid", type: "number", required: true },
@@ -52,37 +51,37 @@ export default function ContributionDetail() {
         { amount: Number(values.amount), account_number: values.account_number });
       setPayModal(false);
       if (res.data.mode === "virtual_account") {
-        notifySuccess(`Transfer to account ${res.data.account_number} to complete your payment`);
+        notifySuccess(`complete your payment`);
       } else {
         notifySuccess(res.data.message || "Payment initiated");
       }
-
-      const nextAction = res.data.next_action;
-        if (nextAction?.type === "redirect_url") {
-          window.location.href = nextAction.redirect_url.url;
-        } else if (nextAction?.type === "payment_instruction") {
-          // show the "approve on your phone" message and start polling check-payment
-           load();
-        }
      
+       await load();
+
+        // Keep checking until payment status changes
+        let attempts = 0;
+        const maxAttempts = 12;
+
+        const interval = setInterval(async () => {
+      attempts++;
+
+          try {
+            await load();
+
+            if (attempts >= maxAttempts) {
+              clearInterval(interval);
+            }
+          } catch (err) {
+            clearInterval(interval);
+          }
+        }, 5000);
+
     } catch (err) {
       notifyError(err, "Could not start the payment");
     }
   }
 
-  async function checkStatus() {
-    setChecking(true);
-    try {
-      const res = await api.post(`/contributions/${id}/check-payment`);
-      if (res.data.status === "PAID") notifySuccess("Payment confirmed — thank you!");
-      else notifyError(null, res.data.detail || "Payment not confirmed yet — try again shortly.");
-      load();
-    } catch (err) {
-      notifyError(err, "Could not check payment status");
-    } finally {
-      setChecking(false);
-    }
-  }
+
 
   if (!c) return <Layout title="Contribution"><div className="sf-card">Loading…</div></Layout>;
 
@@ -130,11 +129,7 @@ export default function ContributionDetail() {
 
           <div className="d-flex gap-2 flex-wrap">
             {canPay && <button className="btn btn-sf-accent" onClick={() => setPayModal(true)}>Process Payment</button>}
-            {canCheckStatus && (
-              <button className="btn btn-outline-secondary fw-bold" onClick={checkStatus} disabled={checking}>
-                {checking ? "Checking…" : "Check Payment Status"}
-              </button>
-            )}
+          
           </div>
         </div>
       )}

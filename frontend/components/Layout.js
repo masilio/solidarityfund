@@ -10,7 +10,7 @@ export default function Layout({ title, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (ready && !user) router.replace("/login");
+    if (ready && !user) router.replace("/");
   }, [ready, user]);
 
   // Close the mobile drawer automatically on every navigation.

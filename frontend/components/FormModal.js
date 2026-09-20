@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import FieldsGrid from "./FieldsGrid";
 
-/**
- * Generic popup form modal — used for quick single-record edits and
- * standalone creates outside the guided registration wizard. Fields wrap
- * into a responsive multi-column grid so typical forms fit without a
- * scrollbar on any screen size.
- */
 export default function FormModal({ title, fields, initialValues = {}, submitLabel = "Submit", onSubmit, onClose }) {
   const [values, setValues] = useState(initialValues);
   const [saving, setSaving] = useState(false);
@@ -16,9 +10,6 @@ export default function FormModal({ title, fields, initialValues = {}, submitLab
     return () => { document.body.style.overflow = ""; };
   }, []);
 
-  // Width/columns are based on visible fields only, so hiding a field via
-  // showIf (e.g. cash fields when Distribution Type is Material) doesn't
-  // leave empty grid space sized for a field that isn't shown.
   const visibleCount = fields.filter((f) => !f.showIf || f.showIf(values)).length;
   const columns = visibleCount > 8 ? 3 : visibleCount > 3 ? 2 : 1;
   const modalWidth = Math.min(320 + columns * 260, 980);

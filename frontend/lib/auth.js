@@ -47,15 +47,14 @@ export function AuthProvider({ children }) {
     setRoles([]);
     setPermissions([]);
     setContributor(null);
-    router.push("/login");
+    router.push("/");
   }
 
   function hasRole(...allowed) {
     return roles.includes("ADMINISTRATOR") || allowed.some((r) => roles.includes(r));
   }
 
-  // What the UI actually gates on: permissions, not roles — the whole point of the system
-  // being that two users with the same role can end up with different capabilities.
+  
   function hasPermission(...codes) {
     if (permissions === "ALL" || roles.includes("ADMINISTRATOR")) return true;
     return codes.some((c) => permissions.includes(c));

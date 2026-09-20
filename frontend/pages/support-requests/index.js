@@ -21,15 +21,13 @@ export default function SupportRequests() {
   const [toDelete, setToDelete] = useState(null);
 
   useEffect(() => {
-    // Any assessment can be picked here — verification happens together with the resource
-    // management staff's verify-allocate step on this request, not as a separate earlier gate.
+   
     api.get("/assessments", { params: { page_size: 100 } }).then((r) =>
       setAssessments([...r.data.items].sort((a, b) => b.assessment_id - a.assessment_id))
     );
   }, []);
 
-  // Arriving from "assessment -> add affected assets -> ..." lands here with the assessment
-  // already known — open straight into the create form instead of making staff pick it again.
+ 
   useEffect(() => {
     if (assessment_id && canManage) {
       setModal({ mode: "create", record: { assessment_id: Number(assessment_id) } });

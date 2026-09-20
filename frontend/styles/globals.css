@@ -1,8 +1,6 @@
-/* Standard, high-contrast web-safe palette — legible on projectors,
-   low-quality monitors and at a distance. Kept as CSS variables so every
-   component reuses the same, tested combination. */
+
 :root {
-  --sf-navy: #1F3864;
+  --sf-navy: #994208;
   --sf-navy-dark: #16294A;
   --sf-orange: #C55A11;
   --sf-green: #1E7B34;

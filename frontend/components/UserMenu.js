@@ -2,10 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "../lib/auth";
 
-/**
- * Top-right profile + logout — every logged-in user gets this regardless of role or
- * permissions, since "see your own profile and log out" isn't gated by anything.
- */
 export default function UserMenu() {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);

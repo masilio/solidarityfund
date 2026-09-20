@@ -2,18 +2,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAuth } from "../lib/auth";
 
-// perms: null means every logged-in user sees it. Otherwise it's a list of permission
-// codes — holding any one of them shows the link, matching the backend's require_any_permission.
+// permissions set to links
 const LINKS = [
   { href: "/dashboard", label: "Dashboard", perms: null },
-  { href: "/disasters", label: "Disasters", perms: ["REGISTER_BENEFICIARY", "VERIFY_SUPPORT_REQUEST", "SUBMIT_SUPPORT_REQUEST"] },
+  { href: "/disasters", label: "Disasters", perms: ["REGISTER_BENEFICIARY", "SUBMIT_SUPPORT_REQUEST"] },
   { href: "/households", label: "Households", perms: ["REGISTER_BENEFICIARY", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST", "APPROVE_SUPPORT_REQUEST", "SUBMIT_SUPPORT_REQUEST", "VIEW_REQUEST_HISTORY"] },
   { href: "/assessments", label: "Assessments", perms: ["REGISTER_BENEFICIARY", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST", "APPROVE_SUPPORT_REQUEST", "SUBMIT_SUPPORT_REQUEST", "VIEW_REQUEST_HISTORY"] },
   { href: "/support-requests", label: "Support Requests", perms: ["SUBMIT_SUPPORT_REQUEST", "VIEW_REQUEST_HISTORY", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST", "APPROVE_SUPPORT_REQUEST", "DISBURSE_SUPPORT"] },
   { href: "/approvals", label: "Approvals", perms: ["APPROVE_SUPPORT_REQUEST"] },
   { href: "/distributions", label: "Distributions", perms: ["DISBURSE_SUPPORT", "VIEW_REQUEST_HISTORY", "APPROVE_SUPPORT_REQUEST"] },
   { href: "/contributions", label: "Contributions", perms: ["RECORD_CONTRIBUTION", "VIEW_CONTRIBUTION", "CONFIRM_CONTRIBUTION"] },
-  { href: "/inventory", label: "Items & Inventory", perms: ["MANAGE_INVENTORY", "SUBMIT_SUPPORT_REQUEST", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST"] },
+  { href: "/inventory", label: "Items & Inventory", perms: ["MANAGE_INVENTORY", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST"] },
   { href: "/reports", label: "Reports", perms: ["VIEW_REPORTS"] },
   { href: "/users", label: "Users & Roles", perms: ["MANAGE_USERS", "ASSIGN_ROLES", "ASSIGN_PERMISSIONS"] },
   { href: "/audit-log", label: "Audit Log", perms: ["VIEW_AUDIT_LOGS"] },

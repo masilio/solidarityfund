@@ -12,10 +12,8 @@ import { useAuth } from "../../lib/auth";
 
 const GATEWAY_METHODS = ["BANK", "MOBILE_MONEY_MTN", "MOBILE_MONEY_AIRTEL"];
 const PAYMENT_METHOD_OPTIONS = [
-  { value: "BANK", label: "Bank Transfer" },
   { value: "MOBILE_MONEY_MTN", label: "MTN Mobile Money" },
   { value: "MOBILE_MONEY_AIRTEL", label: "Airtel Money" },
-  { value: "CASH", label: "Cash (handed over directly)" },
   { value: "CHEQUE", label: "Cheque" },
 ];
 

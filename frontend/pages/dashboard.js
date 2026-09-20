@@ -3,14 +3,14 @@ import { useAuth } from "../lib/auth";
 import Link from "next/link";
 
 const CARDS = [
-  { href: "/disasters", label: "Disasters", desc: "Record and manage disaster/incident events.", perms: ["REGISTER_BENEFICIARY", "VERIFY_SUPPORT_REQUEST", "SUBMIT_SUPPORT_REQUEST"] },
+  { href: "/disasters", label: "Disasters", desc: "Record and manage disaster/incident events.", perms: ["REGISTER_BENEFICIARY", "SUBMIT_SUPPORT_REQUEST"] },
   { href: "/households", label: "Households", desc: "Register affected households and their members.", perms: ["REGISTER_BENEFICIARY", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST", "APPROVE_SUPPORT_REQUEST", "SUBMIT_SUPPORT_REQUEST", "VIEW_REQUEST_HISTORY"] },
   { href: "/assessments", label: "Assessments", desc: "Record impact assessments and affected assets.", perms: ["REGISTER_BENEFICIARY", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST", "APPROVE_SUPPORT_REQUEST", "SUBMIT_SUPPORT_REQUEST", "VIEW_REQUEST_HISTORY"] },
   { href: "/support-requests", label: "Support Requests", desc: "Submit, verify and allocate assistance.", perms: ["SUBMIT_SUPPORT_REQUEST", "VIEW_REQUEST_HISTORY", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST", "APPROVE_SUPPORT_REQUEST", "DISBURSE_SUPPORT"] },
   { href: "/approvals", label: "Approvals", desc: "Review and decide on submitted requests.", perms: ["APPROVE_SUPPORT_REQUEST"] },
   { href: "/distributions", label: "Distributions", desc: "View assistance already disbursed to households.", perms: ["DISBURSE_SUPPORT", "VIEW_REQUEST_HISTORY", "APPROVE_SUPPORT_REQUEST"] },
   { href: "/contributions", label: "Contributions", desc: "Record and confirm cash/item contributions.", perms: ["RECORD_CONTRIBUTION", "VIEW_CONTRIBUTION", "CONFIRM_CONTRIBUTION"] },
-  { href: "/inventory", label: "Items & Inventory", desc: "Manage items, categories, stock and the fund ledger.", perms: ["MANAGE_INVENTORY", "SUBMIT_SUPPORT_REQUEST", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST"] },
+  { href: "/inventory", label: "Items & Inventory", desc: "Manage items, categories, stock and the fund ledger.", perms: ["MANAGE_INVENTORY", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST"] },
   { href: "/reports", label: "Reports", desc: "Export PDF, Excel or Word reports with filters.", perms: ["VIEW_REPORTS"] },
   { href: "/users", label: "Users & Roles", desc: "Manage accounts, roles and permissions.", perms: ["MANAGE_USERS", "ASSIGN_ROLES", "ASSIGN_PERMISSIONS"] },
   { href: "/audit-log", label: "Audit Log", desc: "Review the full trail of system activity.", perms: ["VIEW_AUDIT_LOGS"] },
@@ -18,7 +18,7 @@ const CARDS = [
 
 export default function Dashboard() {
   const { user, hasPermission } = useAuth();
-  const visible = CARDS.filter((c) => hasPermission(...c.perms));
+  const visible = CARDS.filter((card) => hasPermission(...card.perms));
   const canRegister = hasPermission("REGISTER_BENEFICIARY");
 
   return (
@@ -30,7 +30,7 @@ export default function Dashboard() {
             <div>
               <h5 className="mb-1 fw-bold">Register a New Case</h5>
               <p className="mb-0 fw-semibold" style={{ opacity: .9 }}>
-                Guided step-by-step flow: household &rarr; members &rarr; assessment &rarr; affected assets &rarr; support request.
+          
               </p>
             </div>
             <span className="btn btn-sf-accent">Start &rarr;</span>

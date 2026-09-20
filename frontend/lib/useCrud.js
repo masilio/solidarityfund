@@ -3,9 +3,7 @@ import api from "./api";
 import { useToast } from "./toast";
 
 /**
- * Generic list+CRUD helper for one API resource. Keeps every list page's
- * data-fetching, pagination and success/error toasting identical, so each
- * page only has to describe its columns and its form fields.
+ * CRUD helper for one API resource
  */
 export default function useCrud(basePath, { params = {} } = {}) {
   const { notifySuccess, notifyError } = useToast();
