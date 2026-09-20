@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     flutterwave_client_secret: str
     flutterwave_idp_url: str
     flutterwave_base_url: str
-    flutterwave_webhook_hash: str
+    
     backend_base_url: str
     frontend_base_url: str
 
