@@ -63,14 +63,19 @@ class PaymentService:
         phone: str, country_code: str, network: str,
         amount: float, currency: str,redirect_url: str | None = None,
     ) -> dict:
-        customer = await self.create_customer(email, first_name, last_name, phone, country_code)
+        
+        customer = await self.find_customer_by_email(email)
+        if not customer:
+          customer = await self.create_customer(email, first_name, last_name, phone, country_code)
+          
+        customer_id = customer["id"]
+        
         payment_method = await self.create_mobile_money_method(country_code, network, phone)
         return await self.create_charge(
-            customer_id=customer["data"]["id"],
+            customer_id=customer_id,
             payment_method_id=payment_method["data"]["id"],
             amount=amount,
             currency=currency,
-            redirect_url=redirect_url,
         )
         
     async def payment_with_card(
@@ -78,10 +83,15 @@ class PaymentService:
          amount: float, currency: str,card_number: str, expiry_month: str, expiry_year: str, cvv: str,
         ) -> dict:
            
-        customer = await self.create_customer(email, first_name, last_name,phone,country_code)
+        customer = await self.find_customer_by_email(email)
+        if not customer:
+             customer = await self.create_customer(email, first_name, last_name, phone, country_code)
+                 
+        customer_id = customer["id"]
+        
         payment_method = await self.create_cardPayment_method(card_number,expiry_month,expiry_year,cvv)
         return await self.create_charge(
-                        customer_id=customer["data"]["id"],
+                        customer_id=customer_id,
                         payment_method_id=payment_method["data"]["id"],
                         amount=amount,
                         currency=currency,
@@ -89,6 +99,17 @@ class PaymentService:
         
     async def verify_charge(self, charge_id: str) -> dict:
          return await self.client.get(f"/charges/{charge_id}")
+     
+     
+    async def find_customer_by_email(self, email: str) -> dict | None:
+        result = await self.client.post(  "/customers/search?page=1&size=10",   {   "email": email,     },  )
+
+        customers = result.get("data", [])
+
+        if not customers:
+            return None
+
+        return customers[0]
 
 
 payment_service = PaymentService()

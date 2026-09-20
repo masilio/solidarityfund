@@ -27,8 +27,7 @@ def list_distributions(page: int = 1, page_size: int = 20, household_id: int | N
 
 @router.get("/{distribution_id}")
 def get_distribution(distribution_id: int, session: Session = Depends(get_session), user: User = Depends(require_any_permission(*VIEW_PERMS))):
-    """Distributions are a financial/inventory record of assistance already handed over — append-only
-    by design (no edit/delete), same as the fund ledger and stock movements they generate."""
+ 
     fs = session.get(FundSupport, distribution_id)
     if not fs:
         raise HTTPException(404, "Distribution not found")

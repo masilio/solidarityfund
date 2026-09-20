@@ -17,7 +17,6 @@ class FlutterwaveClient:
             "Accept": "application/json",
             "X-Trace-Id": str(uuid.uuid4()),
             "X-Idempotency-Key": str(uuid.uuid4()),
-            "X-Scenario-Key": "scenario:auth_redirect",
         }
 
         async with httpx.AsyncClient(base_url=settings.flutterwave_base_url, timeout=30.0) as client:

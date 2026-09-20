@@ -26,10 +26,7 @@ def get_user_roles(user: User, session: Session) -> list[str]:
 
 
 def get_user_permissions(user: User, session: Session) -> set[str]:
-    """Effective permissions = the default set granted by the user's role(s), with any of
-    their own UserPermission overrides applied on top (granted=True adds, granted=False
-    revokes) — this is what lets two users with the same role end up with different
-    capabilities."""
+   
     role_names = get_user_roles(user, session)
     if not role_names:
         return set()
@@ -51,10 +48,7 @@ def get_user_permissions(user: User, session: Session) -> set[str]:
 
 
 def require_roles(*allowed_roles: str):
-    """Route dependency factory enforcing plain role membership. ADMINISTRATOR always passes.
-    Used only where a check is genuinely about who someone is (e.g. "any authenticated
-    contributor") rather than what they're allowed to do — most business actions should use
-    require_permissions instead."""
+   
 
     def checker(user: User = Depends(get_current_user), session: Session = Depends(get_session)) -> User:
         roles = get_user_roles(user, session)
@@ -66,10 +60,7 @@ def require_roles(*allowed_roles: str):
 
 
 def require_permissions(*required_codes: str):
-    """Route dependency factory requiring ALL of the given permission codes (a composite
-    action like verify-allocate-submit genuinely needs all three). ADMINISTRATOR always
-    passes. This is the primary authorization mechanism — most routes should use this, not
-    require_roles, so that permission overrides actually take effect."""
+   
 
     def checker(user: User = Depends(get_current_user), session: Session = Depends(get_session)) -> User:
         roles = get_user_roles(user, session)
@@ -84,8 +75,7 @@ def require_permissions(*required_codes: str):
 
 
 def require_any_permission(*acceptable_codes: str):
-    """Like require_permissions, but passes if the user holds ANY one of the given codes —
-    for endpoints (mostly reads) that make sense for several different roles' workflows."""
+   
 
     def checker(user: User = Depends(get_current_user), session: Session = Depends(get_session)) -> User:
         roles = get_user_roles(user, session)

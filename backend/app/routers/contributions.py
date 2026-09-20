@@ -248,9 +248,7 @@ async def initiate_payment(
     redirect_url = f"{settings.frontend_base_url}/payments/callback?contribution_id={contribution_id}"
     try:
         if cash.payment_method == "BANK":
-            # TODO: payment_service currently has no bank-transfer method.
-            # Add a `pay_with_bank_transfer(...)` method (customer + bank_transfer
-            # payment-method + charge) before this branch will work.
+            
             raise HTTPException(501, "Bank transfer payment is not yet implemented in payment_service")
         else:
             network = "MTN" if cash.payment_method == "MOBILE_MONEY_MTN" else "AIRTEL"
@@ -311,8 +309,10 @@ async def check_payment(
 
     data = result.get("data", {})
     status = data.get("status")
+    
+    print(data)
 
-    if status in ("successful", "success"):
+    if status in ("successful", "success","succeeded"):
         cash.payment_status = "PAID"
         cash.amount_paid = data.get("amount") or cash.amount
         cash.paid_at = datetime.utcnow()

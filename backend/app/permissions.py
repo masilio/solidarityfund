@@ -1,18 +1,4 @@
-"""
-The permission catalog and each role's default permission set. Seeded into the
-Permission/RolePermission tables by app/seed.py; require_permissions() in app/deps.py is
-what actually enforces this at request time.
 
-Roles: ADMINISTRATOR, RESPONSE_MANAGER, RESOURCE_MANAGER, CONTRIBUTOR. ADMINISTRATOR
-always passes every permission check regardless of what's seeded here (see deps.py) — the
-seeded ADMINISTRATOR row below exists so the row shows up in the UI's permission matrix,
-not because it's needed for the bypass to work.
-
-APPROVE_SUPPORT_REQUEST deliberately has no default role — approving isn't tied to a job
-title here, it's an elevated capability an administrator grants to specific individuals
-(e.g. a senior resource manager) via user-level permissions, which is exactly the "same
-role, different permissions" scenario this system exists to support.
-"""
 
 PERMISSIONS: list[tuple[str, str]] = [
     ("MANAGE_USERS", "Create, view, update, delete, lock and unlock user accounts"),

@@ -1,7 +1,4 @@
-"""User, role and permission management — gated per-action rather than router-wide, since
-MANAGE_USERS, ASSIGN_ROLES and ASSIGN_PERMISSIONS are separate permissions that need not be
-held together (an administrator has all three by default; nothing stops another user from
-being individually granted just one)."""
+
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlmodel import Session, select

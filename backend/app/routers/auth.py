@@ -37,12 +37,7 @@ def login(request: Request, form: OAuth2PasswordRequestForm = Depends(), session
 
 @router.post("/register")
 def register(payload: dict, request: Request, session: Session = Depends(get_session)):
-    """Public self-registration — no auth required; the landing page's "Donation" button.
-    Looks like the Contributor form (contributor_name, contributor_type, phone_number,
-    email, address) plus a password, because that's what it actually creates: a Contributor
-    record (the organization/individual doing the giving) linked to a new User account (how
-    they log in) with the CONTRIBUTOR role — not just a bare user account. Always CONTRIBUTOR;
-    anyone needing a staff role goes through an administrator via POST /users instead."""
+    
     if session.exec(select(User).where(User.email == payload["email"])).first():
         raise HTTPException(400, "Email already registered")
     contributor_role = session.exec(select(Role).where(Role.role_name == "CONTRIBUTOR")).first()

@@ -8,8 +8,7 @@ from app.audit import log_action
 from app.pagination import paginate
 
 router = APIRouter(prefix="/households", tags=["households"])
-# View access is broader than write: resource managers and approvers need household
-# context for their own workflows even though only response managers register beneficiaries.
+
 VIEW_PERMS = ("REGISTER_BENEFICIARY", "VERIFY_SUPPORT_REQUEST", "ALLOCATE_SUPPORT_REQUEST",
               "APPROVE_SUPPORT_REQUEST", "SUBMIT_SUPPORT_REQUEST", "VIEW_REQUEST_HISTORY")
 

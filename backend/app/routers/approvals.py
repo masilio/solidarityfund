@@ -19,11 +19,7 @@ def _user_brief(session: Session, user_id: int | None) -> dict | None:
 @router.get("/pending")
 def pending_requests(page: int = 1, page_size: int = 20, session: Session = Depends(get_session),
                       user: User = Depends(require_permissions("APPROVE_SUPPORT_REQUEST"))):
-    """Enriched beyond the raw support_request row so an approver can see what's being asked
-    for and who handled it so far, without leaving this list: household, requester, the
-    resource management staff member who verified it (looked up from audit_log, since who
-    verified isn't a column on support_request itself), and — for a Material/Service request —
-    every item with its requested and approved quantities."""
+   
     result = paginate(session, SupportRequest, page, page_size,
                        extra_filters=[SupportRequest.status == "SUBMITTED_FOR_APPROVAL"],
                        order_by=SupportRequest.request_id.desc())
@@ -61,10 +57,7 @@ def pending_requests(page: int = 1, page_size: int = 20, session: Session = Depe
 @router.post("/{request_id}/decide")
 def decide(request_id: int, payload: dict, request: Request, session: Session = Depends(get_session),
            user: User = Depends(require_permissions("APPROVE_SUPPORT_REQUEST"))):
-    """payload: {"decision": "APPROVED"|"REJECTED"|"SENT_BACK", "approved_amount": optional, "remarks": optional}
-    APPROVED -> ready for disbursement. REJECTED -> closed. SENT_BACK -> loops back to resource management staff.
-    approved_amount only ever applies to a Cash-type request — anything sent for a Material/Service
-    request is dropped rather than stored, since there's nothing cash-related to approve there."""
+  
     sr = session.get(SupportRequest, request_id)
     if not sr or sr.status != "SUBMITTED_FOR_APPROVAL":
         raise HTTPException(404, "No pending request found for this id")
