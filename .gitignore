@@ -2,6 +2,9 @@
 backend/sfvenv/
 backend/venv/
 backend/.env
+backend/app/__pycache__/
+backend/routers/__pycache__/
+
 
 # =========================
 # Node / Frontend
