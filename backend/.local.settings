@@ -1,0 +1,24 @@
+# Used by docker-compose. Copy to .env and edit before `docker compose up`.
+
+#DATABASE_URL=mysql+pymysql://sf_user:sf_pass@localhost:3306/solidarityfund
+
+DATABASE_URL =mysql+pymysql://avnadmin:<password>@mysql-solidarityfund-solidarityfund-datastore.k.aivencloud.com:17520/defaultdb
+JWT_SECRET=change-this-to-a-long-random-string
+ADMIN_EMAIL=admin@fund.local
+ADMIN_PASSWORD=ChangeMe123!
+NEXT_PUBLIC_API_URL=https://sfmrest.vercel.app
+
+# Flutterwave v4 sandbox — get free test credentials at https://dashboard.flutterwave.com
+
+FLUTTERWAVE_CLIENT_ID=34ec3245-32b5-4184-bcc7-8252e8e54089
+FLUTTERWAVE_CLIENT_SECRET=zk7eNzjY9cXDilqc5rqL8nuhELcfjpJL
+FLUTTERWAVE_IDP_URL=https://idp.flutterwave.com/realms/flutterwave/protocol/openid-connect/token
+FLUTTERWAVE_BASE_URL=https://developersandbox-api.flutterwave.com
+
+#Local environment
+#BACKEND_BASE_URL=http://localhost:8000
+#FRONTEND_BASE_URL=http://localhost:3000
+
+#Production environment
+BACKEND_BASE_URL=https://sfmrest.vercel.app
+FRONTEND_BASE_URL=https://sfm.vercel.app
