@@ -19,10 +19,6 @@ class Settings(BaseSettings):
     backend_base_url: str
     frontend_base_url: str
 
-    fund_bank_account: str
-    fund_momo_airtel: str
-    fund_momo_mtn: str
-
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 
