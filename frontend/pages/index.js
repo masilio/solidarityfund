@@ -58,7 +58,10 @@ export default function Home() {
   return (
     <div className="sf-landing">
       <header className="sf-landing-hero">
-       
+        <head>
+   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2519913602167927"
+     crossorigin="anonymous"></script>
+    </head>
         <div className="sf-landing-hero-inner">
           <div className="sf-landing-brand">Social Solidarity Fund</div>
           <h1>Supporting Disaster-Affected Communities. Building Better Lives.</h1>
