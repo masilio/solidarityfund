@@ -23,7 +23,13 @@ export default function Sidebar({ open = false, onClose }) {
   const { hasPermission } = useAuth();
 
   return (
-    <nav className={`sf-sidebar ${open ? "sf-sidebar-open" : ""}`}>
+    <>
+    <head>
+ <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2519913602167927"
+     crossorigin="anonymous"></script>
+    </head>
+
+     <nav className={`sf-sidebar ${open ? "sf-sidebar-open" : ""}`}>
       <div className="brand">Solidarity Fund</div>
       {LINKS.filter((l) => !l.perms || hasPermission(...l.perms)).map((l) => (
         <Link key={l.href} href={l.href} onClick={onClose} className={router.pathname.startsWith(l.href) ? "active" : ""}>
@@ -31,5 +37,8 @@ export default function Sidebar({ open = false, onClose }) {
         </Link>
       ))}
     </nav>
+    
+    </>
+   
   );
 }
